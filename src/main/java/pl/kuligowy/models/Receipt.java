@@ -1,4 +1,4 @@
-package models;
+package pl.kuligowy.models;
 
 import java.math.BigDecimal;
 
