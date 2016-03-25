@@ -1,25 +1,28 @@
 package pl.kuligowy.controllers;
 
  
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.kuligowy.models.Receipt;
+import pl.kuligowy.models.ReceiptRepository;
+ 
 
 
 @RestController
 public class ReceiptController {
  
+	@Autowired
+	private ReceiptRepository receiptRepository;
  
-    @RequestMapping("/receipt")
+
     @ResponseBody
+    @RequestMapping("/receipt")
     public List<Receipt> receipt() {
-    	ArrayList<Receipt> list = new ArrayList<Receipt>();
-        return list;
+    	return this.receiptRepository.findAll();
     }
 }

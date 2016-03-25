@@ -3,44 +3,79 @@ package pl.kuligowy.models;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "receipt")
 public class Receipt {
 
 	@Id
 	private int id;
-	private Shop shop;
-	private BigDecimal value;
-	private Date eventDate;
+	@OneToOne()
+	@JoinColumn(name = "shop_id")
+	private Shop shopId;
+	@Column(name = "total")
+	private BigDecimal total;
+	@Column(name = "event_time")
+	private Date eventTime;
+	@OneToMany
+	@JoinColumn(name = "receipt_id", referencedColumnName = "id")
 	private List<ReceiptItem> receiptItems;
-	public Shop getShop() {
-		return shop;
+
+	public Receipt(int id, Shop shopId, BigDecimal total, Date eventTime, List<ReceiptItem> receiptItems) {
+		super();
+		this.id = id;
+		this.shopId = shopId;
+		this.total = total;
+		this.eventTime = eventTime;
+		this.receiptItems = receiptItems;
 	}
-	public void setShop(Shop shop) {
-		this.shop = shop;
+
+	public int getId() {
+		return id;
 	}
-	public BigDecimal getValue() {
-		return value;
+
+	public void setId(int id) {
+		this.id = id;
 	}
-	public void setValue(BigDecimal value) {
-		this.value = value;
+
+	public Shop getShopId() {
+		return shopId;
 	}
-	public Date getEventDate() {
-		return eventDate;
+
+	public void setShopId(Shop shopId) {
+		this.shopId = shopId;
 	}
-	public void setEventDate(Date eventDate) {
-		this.eventDate = eventDate;
+
+	public BigDecimal getTotal() {
+		return total;
 	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public Date getEventTime() {
+		return eventTime;
+	}
+
+	public void setEventTime(Date eventTime) {
+		this.eventTime = eventTime;
+	}
+
 	public List<ReceiptItem> getReceiptItems() {
 		return receiptItems;
 	}
+
 	public void setReceiptItems(List<ReceiptItem> receiptItems) {
 		this.receiptItems = receiptItems;
 	}
- 
- 
-	
-	
+
 }
