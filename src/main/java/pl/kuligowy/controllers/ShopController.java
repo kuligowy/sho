@@ -47,21 +47,11 @@ public class ShopController {
 		return shop;
 	}
 
-	// @ExceptionHandler(ShopNotFoundException.class)
-	// @ResponseStatus(HttpStatus.NOT_FOUND)
-	// public @ResponseBody Error shopNotFound(ShopNotFoundException e) {
-	// long spittleId = e.getShopId();
-	// return new Error(4, e.getMessage());
-	// }
-
 }
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class ShopNotFoundException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Integer shopId;
 
