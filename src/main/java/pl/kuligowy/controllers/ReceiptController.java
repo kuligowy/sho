@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,11 +30,11 @@ public class ReceiptController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Receipt> save(Receipt receipt) {
+	public ResponseEntity<Receipt> save(@RequestBody Receipt receipt) {
 		Receipt newReceipt = receiptRepository.save(receipt);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(
-				ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(newReceipt.getId()).toUri());
+		headers.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newReceipt.getId()).toUri());
 		ResponseEntity<Receipt> response = new ResponseEntity<Receipt>(newReceipt, headers, HttpStatus.CREATED);
 		return response;
 	}

@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 public class Receipt {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	@OneToOne()
 	@JoinColumn(name = "shop_id")
@@ -28,6 +31,10 @@ public class Receipt {
 	@OneToMany
 	@JoinColumn(name = "receipt_id", referencedColumnName = "id")
 	private List<ReceiptItem> receiptItems;
+
+	public Receipt() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Receipt(int id, Shop shopId, BigDecimal total, Date eventTime, List<ReceiptItem> receiptItems) {
 		super();
