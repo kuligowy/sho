@@ -1,7 +1,7 @@
 package pl.kuligowy.controllers;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,10 +42,7 @@ public class ShopController {
 
 	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
 	public Shop getShop(@PathVariable int id) {
-		Shop shop = repository.findOne(id);
-		if (shop == null)
-			throw new ShopNotFoundException(id);
-		return shop;
+		return Optional.ofNullable(repository.findOne(id)).orElseThrow(() -> new ShopNotFoundException(id));
 	}
 
 }

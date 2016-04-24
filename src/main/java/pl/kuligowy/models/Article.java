@@ -6,35 +6,39 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "shop")
-public class Shop {
+@Table(name = "article")
+public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private int id;
     @Column(name = "name")
     private String name;
+    @Column(name = "description")
+    private String description;
     @Column(name = "sort")
     @JsonIgnore
     private int sort;
-
-    public Shop() {
-
+    
+    public Article() {
+        // TODO Auto-generated constructor stub
     }
 
-    public Shop(String name) {
+    public Article(String name) {
         super();
         this.name = name;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -54,4 +58,11 @@ public class Shop {
         this.sort = sort;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

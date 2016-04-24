@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,13 +28,14 @@ import org.springframework.web.context.WebApplicationContext;
 
 import pl.kuligowy.ApplicationConfiguration;
 import pl.kuligowy.models.Receipt;
+import pl.kuligowy.models.ReceiptItem;
 import pl.kuligowy.models.ReceiptRepository;
 import pl.kuligowy.models.Shop;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationConfiguration.class)
 @WebAppConfiguration
-public class ShopControllerTest {
+public class ReceiptControllerTest {
 
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -69,42 +71,17 @@ public class ShopControllerTest {
     }
 
     @Test
-    public void createReceipt() throws Exception {
-        String receiptJson = json(this.receipt);
-        this.mockMvc.perform(post("/receipt").contentType(contentType).content(receiptJson))
-                .andExpect(status().isCreated());
-//                        .andExpect(header().string("location","http://localhost/receipt/[0-9]+"));
+    public void getTotal() throws Exception {
+        Assert.assertEquals(receipt.getTotal(),BigDecimal.ZERO);
     }
-
+    
     @Test
-    public void receiptNotFound() throws Exception {
-        mockMvc.perform(get("/receipt/2/"))
-                .andExpect(status().isNotFound());
+    public void getTotalNonZero() throws Exception {
+        receipt.getReceiptItems().add(new ReceiptItem(null, BigDecimal.ONE, 15, receipt));
+        receipt.getReceiptItems().add(new ReceiptItem(null, BigDecimal.valueOf(12), 10, receipt));
+        Assert.assertEquals(receipt.getTotal(),BigDecimal.valueOf(135));
     }
-
-//    @Test
-//    public void readSingleShop() throws Exception {
-//        mockMvc.perform(get("/shop/" + this.shop.getId()))
-//                .andExpect(status().isOk()).andExpect(content().contentType(contentType))
-//                .andExpect(jsonPath("$.id", is(this.shop.getId())))
-//                .andExpect(jsonPath("$.name", is(this.shop.getName())));
-//    }
-
-    @Test
-    public void readShops() throws Exception {
-        mockMvc.perform(get("/shop"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$", hasSize(3)));
-    }
-
-    //
-    // @Test
-    // public void createShop() throws Exception {
-    // String shop = json(new Shop(2,"Tesco",20);
-    // this.mockMvc.perform(post("/shop").contentType(contentType).content(shop))
-    // .andExpect(status().isCreated());
-    // }
+ 
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
         this.mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);

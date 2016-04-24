@@ -1,5 +1,7 @@
 package pl.kuligowy;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import org.h2.server.web.WebServlet;
 import org.slf4j.Logger;
 import org.springframework.boot.CommandLineRunner;
@@ -12,15 +14,18 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import pl.kuligowy.models.Item;
-import pl.kuligowy.models.ItemRepository;
+import pl.kuligowy.models.Article;
 import pl.kuligowy.models.Shop;
 import pl.kuligowy.models.ShopRepository;
+import pl.kuligowy.models.ArticleRepository;
+import pl.kuligowy.models.Receipt;
+import pl.kuligowy.models.ReceiptItem;
+import pl.kuligowy.models.ReceiptRepository;
 
 //@Configuration
 //@ComponentScan(basePackages = "pl.kuligowy")
 @EnableJpaRepositories()
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"pl.kuligowy.models","pl.kuligowy"})
 public class ApplicationConfiguration {
 
 	private static final Logger log = org.slf4j.LoggerFactory.getLogger(ApplicationConfiguration.class);
@@ -41,23 +46,22 @@ public class ApplicationConfiguration {
 		return new WebMvcConfigurerAdapter() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/*").allowedOrigins("*")
-				.expo;
+				registry.addMapping("/*").allowedOrigins("*");
 			}
 		};
 	}
 
 	@Bean
-	public CommandLineRunner demo(ShopRepository shopRepository, ItemRepository itemRepository) {
+	public CommandLineRunner demo(ShopRepository shopRepository, ArticleRepository itemRepository,ReceiptRepository receiptRepository) {
 		return (args) -> {
 			// save a couple of customers
-			shopRepository.save(new Shop("Lidl", 10));
-			shopRepository.save(new Shop("Biedronka", 10));
-			shopRepository.save(new Shop("Tesco", 10));
+			Shop s = shopRepository.save(new Shop("Lidl"));
+			shopRepository.save(new Shop("Biedronka"));
+			shopRepository.save(new Shop("Tesco"));
 
-			itemRepository.save(new Item(1, "twarog", 10));
-			itemRepository.save(new Item(2, "platki", 10));
-			itemRepository.save(new Item(3, "mleko", 10));
+			Article a1 = itemRepository.save(new Article("twarog"));
+			Article a2 = itemRepository.save(new Article("platki"));
+			itemRepository.save(new Article( "mleko"));
 
 			log.info("Shops found with findAll():");
 			log.info("-------------------------------");
@@ -67,10 +71,16 @@ public class ApplicationConfiguration {
 
 			log.info("Items found with findAll():");
 			log.info("-------------------------------");
-			for (Item item : itemRepository.findAll()) {
+			for (Article item : itemRepository.findAll()) {
 				log.info(item.toString());
 			}
-
+                        
+                        Receipt receipt = new Receipt(s, new Date());
+//                        receipt.getReceiptItems().add(new ReceiptItem(a1, BigDecimal.valueOf(45), 10, receipt));
+//                        receipt.getReceiptItems().add(new ReceiptItem(a2, BigDecimal.valueOf(25), 5, receipt));
+                        receipt.getReceiptItems().add(new ReceiptItem(a2, BigDecimal.valueOf(45), 10, receipt));
+                        receipt.getReceiptItems().add(new ReceiptItem(a1, BigDecimal.valueOf(25), 5, receipt));
+                        receiptRepository.save(receipt);
 		};
 	}
 
