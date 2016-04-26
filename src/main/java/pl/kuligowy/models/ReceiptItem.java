@@ -27,9 +27,9 @@ public class ReceiptItem {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "article_id")
     private Article article;
-//    @ManyToOne
-//    @JoinColumn(name = "receipt_id")
-//    private Receipt receipt;
+    @ManyToOne
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
 
     public ReceiptItem() {
 
@@ -73,12 +73,12 @@ public class ReceiptItem {
         this.quantity = quantity;
     }
 //
-//    public Receipt getReceipt() {
-//        return receipt;
-//    }
-//
-//    public void setReceipt(Receipt receipt) {
-//        this.receipt = receipt;
-//    }
+    public Receipt getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(Receipt receipt) {
+        this.receipt = receipt;
+    }
     
 }

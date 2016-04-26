@@ -13,6 +13,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import pl.kuligowy.controllers.ItemController;
+import pl.kuligowy.controllers.ReceiptController;
+import pl.kuligowy.controllers.ShopController;
 
 import pl.kuligowy.models.Article;
 import pl.kuligowy.models.Shop;
@@ -25,7 +28,8 @@ import pl.kuligowy.models.ReceiptRepository;
 //@Configuration
 //@ComponentScan(basePackages = "pl.kuligowy")
 @EnableJpaRepositories()
-@SpringBootApplication(scanBasePackages = {"pl.kuligowy.models","pl.kuligowy"})
+@SpringBootApplication(scanBasePackages = {"pl.kuligowy"},
+        exclude = {ItemController.class,ReceiptController.class,ShopController.class})
 public class ApplicationConfiguration {
 
 	private static final Logger log = org.slf4j.LoggerFactory.getLogger(ApplicationConfiguration.class);

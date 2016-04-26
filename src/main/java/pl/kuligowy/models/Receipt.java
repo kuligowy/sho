@@ -32,7 +32,6 @@ public class Receipt {
     @OneToOne()
     @JoinColumn(name = "shop_id")
     private Shop shop;
-//    @Column(name = "total")
     @Transient
     private BigDecimal total;
     @Column(name = "event_time")
@@ -74,10 +73,14 @@ public class Receipt {
 //                .reduce(0, (a, b) -> a + b);
 //        return new BigDecimal(result);
 
-        BigDecimal result2 = receiptItems
+//           liite different
+        BigDecimal result2 = BigDecimal.ZERO;
+        if(receiptItems!=null){
+            result2= receiptItems
                 .stream()
                 .map((t) -> t.getPrice().multiply(BigDecimal.valueOf(t.getQuantity())))
                 .reduce(BigDecimal.ZERO, (t, u) -> t.add(u));
+        }
         return result2;
     }
 
