@@ -29,63 +29,63 @@ import pl.kuligowy.models.ReceiptRepository;
 //@ComponentScan(basePackages = "pl.kuligowy")
 @EnableJpaRepositories()
 @SpringBootApplication(scanBasePackages = {"pl.kuligowy"},
-        exclude = {ItemController.class,ReceiptController.class,ShopController.class})
+        exclude = {ItemController.class, ReceiptController.class, ShopController.class})
 public class ApplicationConfiguration {
 
-	private static final Logger log = org.slf4j.LoggerFactory.getLogger(ApplicationConfiguration.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(ApplicationConfiguration.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApplicationConfiguration.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApplicationConfiguration.class, args);
+    }
 
-	@Bean
-	ServletRegistrationBean h2servletRegistration() {
-		ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
-		registrationBean.addUrlMappings("/console/*");
-		return registrationBean;
-	}
+    @Bean
+    ServletRegistrationBean h2servletRegistration() {
+        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
+        registrationBean.addUrlMappings("/console/*");
+        return registrationBean;
+    }
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurerAdapter() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/*").allowedOrigins("*");
-			}
-		};
-	}
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurerAdapter() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/api/**");
+//            }
+//        };
+//    }
 
-	@Bean
-	public CommandLineRunner demo(ShopRepository shopRepository, ArticleRepository itemRepository,ReceiptRepository receiptRepository) {
-		return (args) -> {
-			// save a couple of customers
-			Shop s = shopRepository.save(new Shop("Lidl"));
-			shopRepository.save(new Shop("Biedronka"));
-			shopRepository.save(new Shop("Tesco"));
+    @Bean
+    public CommandLineRunner demo(ShopRepository shopRepository, ArticleRepository itemRepository, ReceiptRepository receiptRepository) {
+        return (args) -> {
+            // save a couple of customers
+            Shop s = shopRepository.save(new Shop("Lidl"));
+            shopRepository.save(new Shop("Biedronka"));
+            shopRepository.save(new Shop("Tesco"));
 
-			Article a1 = itemRepository.save(new Article("twarog"));
-			Article a2 = itemRepository.save(new Article("platki"));
-			itemRepository.save(new Article( "mleko"));
+            Article a1 = itemRepository.save(new Article("twarog"));
+            Article a2 = itemRepository.save(new Article("platki"));
+            itemRepository.save(new Article("mleko"));
 
-			log.info("Shops found with findAll():");
-			log.info("-------------------------------");
-			for (Shop shop : shopRepository.findAll()) {
-				log.info(shop.toString());
-			}
+            log.info("Shops found with findAll():");
+            log.info("-------------------------------");
+            for (Shop shop : shopRepository.findAll()) {
+                log.info(shop.toString());
+            }
 
-			log.info("Items found with findAll():");
-			log.info("-------------------------------");
-			for (Article item : itemRepository.findAll()) {
-				log.info(item.toString());
-			}
-                        
-                        Receipt receipt = new Receipt(s, new Date());
+            log.info("Items found with findAll():");
+            log.info("-------------------------------");
+            for (Article item : itemRepository.findAll()) {
+                log.info(item.toString());
+            }
+
+            Receipt receipt = new Receipt(s, new Date());
 //                        receipt.getReceiptItems().add(new ReceiptItem(a1, BigDecimal.valueOf(45), 10, receipt));
 //                        receipt.getReceiptItems().add(new ReceiptItem(a2, BigDecimal.valueOf(25), 5, receipt));
-                        receipt.getReceiptItems().add(new ReceiptItem(a2, BigDecimal.valueOf(45), 10, receipt));
-                        receipt.getReceiptItems().add(new ReceiptItem(a1, BigDecimal.valueOf(25), 5, receipt));
-                        receiptRepository.save(receipt);
-		};
-	}
+            receipt.getReceiptItems().add(new ReceiptItem(a2, BigDecimal.valueOf(45), 10, receipt));
+            receipt.getReceiptItems().add(new ReceiptItem(a1, BigDecimal.valueOf(25), 5, receipt));
+            receiptRepository.save(receipt);
+        };
+    }
 
 }
